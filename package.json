@@ -1,0 +1,26 @@
+{
+  "name": "vue-dialog-constructor",
+  "version": "0.0.1",
+  "description": "Easily create vue-dialog",
+  "keywords": [
+    "vue",
+    "vuejs",
+    "vue-dialog",
+    "vuejs-dialog",
+    "dialog"
+  ],
+  "homepage": "https://github.com/ebool/vue-dialog-constructor",
+  "bugs": {
+    "url": "https://github.com/ebool/vue-dialog-constructor/issues"
+  },
+  "license": "MIT",
+  "author": "ebool <lastdorq@gmail.com> (https://ebool.github.io/)",
+  "main": "dist/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ebool/vue-dialog-constructor.git"
+  },
+  "dependencies": {
+
+  }
+}
