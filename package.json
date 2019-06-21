@@ -1,5 +1,5 @@
 {
-  "name": "vue-dialog-constructor",
+  "name": "vue-dialog-manager",
   "version": "0.0.1",
   "description": "Easily create vue-dialog",
   "scripts": {
@@ -10,6 +10,7 @@
     "vuejs",
     "vue-dialog",
     "vuejs-dialog",
+    "vue-dialog-manager",
     "dialog"
   ],
   "homepage": "https://github.com/ebool/vue-dialog-constructor",
