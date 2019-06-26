@@ -1,35 +1,86 @@
 import Vue from 'vue';
 
-export default {
-  create: ({ view, store, props }) => {
+const backgroundConfig = {
+  backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  isShow: false
+};
+
+let list = [];
+
+let background = undefined;
+(function () {
+  if (background) return;
+  background = document.createElement('div');
+  setBackground(background, backgroundConfig.backgroundColor);
+})();
+
+function setBackground (div, color) {
+  div.style.position = 'fixed';
+  div.style.top = '0px';
+  div.style.left = '0px';
+  div.style.right = '0px';
+  div.style.bottom = '0px';
+  div.style.width = '100%';
+  div.style.height = '100%';
+  div.style.display = 'flex';
+  div.style.justifyContent = 'center';
+  div.style.alignItems = 'center';
+  div.style.backgroundColor = color;
+}
+
+function showBackground () {
+  if (list.length < 1) return; // 열려있는 dialog 없으면 return
+  document.body.appendChild(background);
+  document.body.style['overflow'] = 'hidden'; // prevent scroll
+}
+
+function dismissBackground () {
+  if (list.length > 0) return; // 열려있는 dialog 있으면 return
+  document.body.removeChild(background);
+  document.body.style['overflow'] = 'auto'; // scrolling available
+}
+
+const manager = {
+  show ({ view, store, props }) {
     // view 가 vue component 인지 확인
-    const Constructor = Vue.extend(view);
-    let instance = new Constructor({
-      el: document.createElement('div'),
-      propsData: props,
-      store,
-      methods: {
-        dismiss () { this.$destroy(); },
-        show () {
-          let cont = document.createElement('div');
-          cont.style.position = 'fixed';
-          cont.style.top = '0px';
-          cont.style.left = '0px';
-          cont.style.right = '0px';
-          cont.style.bottom = '0px';
-          cont.style.width = '100%';
-          cont.style.height = '100%';
-          cont.style.backgroundColor = 'rgba(0, 0, 0, 0.5)';
-          cont.appendChild(this.$el);
-          document.body.appendChild(cont);
-          document.body.style['overflow'] = 'hidden'; // prevent scroll
+    return new Promise(resolve => {
+
+      /** backgorund 생성 */
+      let dialogContainer = document.createElement('div');
+      setBackground(dialogContainer, '');
+
+      /** dialog instance 생성 */
+      const Constructor = Vue.extend(view);
+      let instance = new Constructor({
+        el: document.createElement('div'),
+        propsData: props,
+        store,
+        methods: {
+          dismiss (data) {
+            this.$destroy();
+            resolve(data);
+          },
+        },
+        beforeDestroy () {
+          let idx = list.indexOf(instance);
+          list.splice(idx, 1);
+          background.removeChild(dialogContainer);
+          dismissBackground()
         }
-      },
-      beforeDestroy () {
-        instance.$el.parentNode.removeChild(this.$el);
-        document.body.style['overflow'] = 'auto'; // scrolling available
-      }
+      });
+      list.push(instance);
+
+      dialogContainer.appendChild(instance.$el);
+      background.appendChild(dialogContainer);
+      showBackground();
     });
-    return instance;
+
+  },
+  removeAllDialog () {
+    for (let i of list) i.dismiss();
+    list = [];
   }
 };
+
+
+export default manager;
