@@ -5,7 +5,7 @@
 node_modules/
 typings/
 coverage/
-dist/
+dist/*
 test/typescript/axios.js*
 sauce_connect.log
 package-lock.json
