@@ -41,17 +41,17 @@ function dismissBackground () {
 }
 
 const manager = {
-  show ({ view, store, props }) {
-    // view 가 vue component 인지 확인
-    return new Promise(resolve => {
-
+  create ({view , props, store}) {
+    let instance = '';
+    let promise = new Promise((resolve) => {
       /** backgorund 생성 */
       let dialogContainer = document.createElement('div');
       setBackground(dialogContainer, '');
 
       /** dialog instance 생성 */
       const Constructor = Vue.extend(view);
-      let instance = new Constructor({
+
+      instance = new Constructor({
         el: document.createElement('div'),
         propsData: props,
         store,
@@ -60,6 +60,12 @@ const manager = {
             this.$destroy();
             resolve(data);
           },
+          show () {
+            dialogContainer.appendChild(instance.$el);
+            background.appendChild(dialogContainer);
+            showBackground();
+            return promise;
+          }
         },
         beforeDestroy () {
           let idx = list.indexOf(instance);
@@ -68,13 +74,10 @@ const manager = {
           dismissBackground()
         }
       });
-      list.push(instance);
-
-      dialogContainer.appendChild(instance.$el);
-      background.appendChild(dialogContainer);
-      showBackground();
     });
 
+    list.push(instance);
+    return instance;
   },
   removeAllDialog () {
     for (let i of list) i.dismiss();
