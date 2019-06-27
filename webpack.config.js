@@ -14,12 +14,12 @@ module.exports = {
   },
 
   optimization:{
-    minimize: true,
+    minimize: false,
   },
 
-  resolve: {
-    alias: {
-      vue: 'vue/dist/vue.js'
-    }
-  }
+  // resolve: {
+  //   alias: {
+  //     vue: 'vue/dist/vue.js'
+  //   }
+  // }
 };
