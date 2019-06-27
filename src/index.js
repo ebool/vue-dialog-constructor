@@ -41,7 +41,7 @@ function dismissBackground () {
 }
 
 const manager = {
-  create ({view , props, store}) {
+  create (view, options = {}) {
     let instance = '';
     let promise = new Promise((resolve) => {
       /** backgorund 생성 */
@@ -53,8 +53,8 @@ const manager = {
 
       instance = new Constructor({
         el: document.createElement('div'),
-        propsData: props,
-        store,
+        propsData: options.props,
+        store: options.store,
         methods: {
           dismiss (data) {
             this.$destroy();
