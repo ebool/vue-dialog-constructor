@@ -11,68 +11,198 @@ npm install vue-dialog-manager
 
 # Example
 
-### 1. import
-~~~
+### 1. Import
+~~~vue
 import DialogManager from 'vue-dailog-manager';
 ~~~
 
 or
 
-~~~
-const DialogManager from 'vue-dialog-manager';
+~~~vue
+let DialogManager = require('vue-dialog-manager');
 ~~~
 
-### 2. showing
+### 2. Showing
+
+First you make your dialog.vue:
+
+dialog.vue
+~~~vue
+<template>
+  <h1>Insert Title</h1>
+  <div>this is dialog</div>
+</template>
+<script>
+export default {
+}
+</script>
+~~~
 
 You can display dialog as follow:
+~~~vue
+<script>
+import Dialog from 'dialog.vue';
+import DialogManager from 'vue-dialog-manager';
+export default {
+  methods: {
+   show() {
+    let instance = DialogManager.create(Dialog);
+    instance.show();
+   }
+  },
+}
+</script>
+
 ~~~
-DialogManager.show({
-    view: { template: '<h1 style="background-color='white'">Hello vue-dialog-manager</h1>'}
-})
-~~~
+
+### 3. Props data
 
 If you hope to insert data, you can do right this:
 
+dialog.vue
+~~~vue
+<template>
+  <h1>{{title}}</h1>
+  <div>this is dialog</div>
+</template>
+<script>
+export default {
+  props: ['title']
+}
+</script>
 ~~~
-DialogManager.show({
-    view: { 
-        template: `<h1 style="background-color='white'">Hello {{title}}</h1>`,
-        props: { title: 'hello'}    
-    }
-})
+
+index.vue
+~~~vue
+<script>
+import DialogManager from 'vue-dialog-manager';
+import Dialog from 'dialog.vue';
+
+export default {
+  methods: {
+   show () {
+    DialogManager.create(Dialog, {
+      props: {
+        title: 'Dialog title'
+      }
+    })
+   }
+  }
+}
+</script>
 ~~~
+
+### 4. Using vuex
 
 You can also use 'vuex' as follow:
 
-~~~
-DialogManager.show({
-    view: { 
-        template: `<h1 style="background-color='white'">Hello {{title}}</h1>`
-    },
-    props: { title: 'hello'},
-    store: //input your vuex store    
-})
+~~~vue
+<script>
+import DialogManager from 'vue-dialog-manager';
+import Dialog from 'dialog.vue';
+
+export default {
+  methods: {
+   show() {
+      DialogManager.create(Dialog, {store: this.$store}).show()    
+   }
+  },
+}
+</script>
 ~~~
 
-### 3. dismiss
+### 5. Dismiss
 
 If you close dialog, All you have to do is call dismiss().
 
-~~~
-DialogManager.show({
-    view: {
-        template: `
-          <div  style="background-color: white; padding: 20px;">
-            <h1>Hello! vue dialog manager</h1>
-            <hr>
-            <h3>write dialog content</h3>
-            <hr>
-            <button @click="dismiss">close</button>
-          </div>
-          `
-    }})
+First, instance.dismiss();
+
+Second, call dismiss() inside dialog.vue
+
+dialog.vue
+~~~vue
+<template>
+  <h1>Insert Dialog title</h1>
+  <div>this is dialog</div>
+  <button @click="close">close</button>
+</template>
+<script>
+export default {
+  methods: {
+   close () {
+    this.dismiss();
+   }
+  },
+}
+</script>
 ~~~
 
-### 3. callback
+instance equals this of dialog.vue
 
+### 6. callback
+
+You can return data when you close dialog
+
+dialog.vue
+~~~vue
+<template>
+  <h1>Insert Dialog title</h1>
+  <div>this is dialog</div>
+  <button @click="close">close</button>
+</template>
+<script>
+export default {
+  methods: {
+   close () {
+    this.dismiss('Insert your data');
+   }
+  },
+}
+</script>
+~~~
+
+index.vue
+
+~~~vue
+<script>
+import DialogManager from 'vue-dialog-manager';
+import Dialog from 'dialog.vue';
+
+export default {
+  methods: {
+   show() {
+      let instance = DialogManager.create(Dialog, {store: this.$store});
+      instance.show().then((data) => {
+        console.log('data from dialog.vue : ', data);
+    })
+   }
+  }
+}
+</script>
+~~~
+
+If you use ECMAScript 2017:
+
+index.vue
+
+~~~vue
+<script>
+import DialogManager from 'vue-dialog-manager';
+import Dialog from 'dialog.vue';
+
+export default {
+  methods: {
+   async show() {
+      let instance = DialogManager.create(Dialog, {store: this.$store});
+      let data = await instance.show();
+      console.log('data from dialog.vue : ', data);
+   }
+  }
+}
+</script>
+~~~
+
+# License
+
+MIT
 
