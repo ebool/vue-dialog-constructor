@@ -13,7 +13,7 @@ npm install vue-dialog-manager
 
 ### 1. Import
 ~~~vue
-import DialogManager from 'vue-dailog-manager';
+import DialogManager from 'vue-dialog-manager';
 ~~~
 
 or
