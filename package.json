@@ -1,6 +1,6 @@
 {
   "name": "vue-dialog-manager",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Easily create vue-dialog",
   "scripts": {
     "build": "webpack"
