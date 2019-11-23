@@ -25,6 +25,7 @@ function setBackground (div, color) {
   div.style.display = 'flex';
   div.style.justifyContent = 'center';
   div.style.alignItems = 'center';
+  div.style.zIndex = '1000000';
   div.style.backgroundColor = color;
 }
 
